@@ -23,6 +23,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: scan project source code 
+        uses: casthighlight/hl-agent-cli
         with: |
           args: --sourceDir /s --workingDir /w --tokenAuth ${{ CAST_HIGHLIGHT_API_TOKEN }} --companyId 16567 --applicationId 105791 
 
