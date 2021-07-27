@@ -27,7 +27,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: pull hl-agent-cli
-        run: docker pull castdocker pull casthighlight/hl-agent-cli
+        run: docker pull casthighlight/hl-agent-cli
 
       # Runs a set of commands using the runners shell
       - name: output help
