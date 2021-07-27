@@ -9,20 +9,20 @@ on:
   workflow_dispatch:
   
 jobs:
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  scan:
+    container:
+      image: casthighlight/hl-agent-cli
+      volumes:
+        - ${{ GITHUB_WORKSPACE }}:/s
+        - /tmp/:/w
+    env:
+      CAST_HIGHLIGHT_API_TOKEN: ${{ secrets.CAST_HIGHLIGHT_API_TOKEN }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: pull hl-agent-cli
-        run: docker pull casthighlight/hl-agent-cli
-
       # Runs a set of commands using the runners shell
-      - name: run cli 
-        run: |
-          docker run --rm -v $(pwd):/s -v /tmp:/w casthighlight/hl-agent-cli --sourceDir /s --workingDir /w --tokenAuth 65bf1b3d-0a7f-409a-bc8f-f37450c651a3 --companyId 16567 --applicationId 105791 
+      - name: scan project source code 
+        with: |
+          args: --sourceDir /s --workingDir /w --tokenAuth ${{ CAST_HIGHLIGHT_API_TOKEN }} --companyId 16567 --applicationId 105791 
+
