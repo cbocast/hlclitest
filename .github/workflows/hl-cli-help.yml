@@ -10,21 +10,19 @@ on:
   
 jobs:
   scan:
+    runs-on: ubuntu-latest
     environment: prod
-    container:
-      image: casthighlight/hl-agent-cli
-      volumes:
-        - ${{ env.GITHUB_WORKSPACE }}:/s
-        - /tmp/:/w
-    env:
-      CAST_HIGHLIGHT_API_TOKEN: ${{ secrets.CAST_HIGHLIGHT_API_TOKEN }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       # Runs a set of commands using the runners shell
       - name: scan project source code 
-        uses: casthighlight/hl-agent-cli
-        with: |
-          args: --sourceDir /s --workingDir /w --tokenAuth ${{ CAST_HIGHLIGHT_API_TOKEN }} --companyId 16567 --applicationId 105791 
+        run: |
+          docker run --rm -v $(pwd):/s -v /tmp:/w  casthighlight/hl-agent-cli \
+                                                   --sourceDir /s \
+                                                   --workingDir /w \
+                                                   --tokenAuth ${{ secrets.CAST_HIGHLIGHT_API_TOKEN }} \
+                                                   --companyId 16567 \
+                                                   --applicationId 105791  
 
