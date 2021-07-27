@@ -10,10 +10,11 @@ on:
   
 jobs:
   scan:
+    environment: prod
     container:
       image: casthighlight/hl-agent-cli
       volumes:
-        - ${{ GITHUB_WORKSPACE }}:/s
+        - ${{ env.GITHUB_WORKSPACE }}:/s
         - /tmp/:/w
     env:
       CAST_HIGHLIGHT_API_TOKEN: ${{ secrets.CAST_HIGHLIGHT_API_TOKEN }}
