@@ -6,23 +6,28 @@ on:
   pull_request:
     branches: [ main ]
 
+  env:
+    MY_COMPANY_ID: 16567
+
   workflow_dispatch:
   
 jobs:
   scan:
     runs-on: ubuntu-latest
+    # use the prod environment, where the secret CAST_HIGHLIGHT_API_TOKEN is defined
     environment: prod
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a set of commands using the runners shell
       - name: scan project source code 
+        env:
+          HELLO_NODEJS_APP_ID: 105791
         run: |
           docker run --rm -v $(pwd):/s -v /tmp:/w  casthighlight/hl-agent-cli \
                                                    --sourceDir /s \
                                                    --workingDir /w \
                                                    --tokenAuth ${{ secrets.CAST_HIGHLIGHT_API_TOKEN }} \
-                                                   --companyId 16567 \
-                                                   --applicationId 105791  
+                                                   --companyId ${{ env.MY_COMPANY_ID }} \
+                                                   --applicationId ${{ env.HELLO_NODEJS_APP_ID }}  
 
