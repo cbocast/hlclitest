@@ -1,7 +1,4 @@
 name: Cast Highlight Scan
-env:
-  MY_COMPANY_ID: 16567
-
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
@@ -21,14 +18,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: get company and application ids
+        run: |
+          cat .github/workflows/hl.env >> $GITHUB_ENV
+
       - name: scan project source code 
-        env:
-          HELLO_NODEJS_APP_ID: 105791
         run: |
           docker run --rm -v $(pwd):/s -v /tmp:/w  casthighlight/hl-agent-cli \
                                                    --sourceDir /s \
                                                    --workingDir /w \
                                                    --tokenAuth ${{ secrets.CAST_HIGHLIGHT_API_TOKEN }} \
-                                                   --companyId ${{ env.MY_COMPANY_ID }} \
-                                                   --applicationId ${{ env.HELLO_NODEJS_APP_ID }}  
+                                                   --companyId ${{ env.companyId }} \
+                                                   --applicationId ${{ env.applicationId }}  
 
